@@ -8,6 +8,7 @@ import {
 
 import {useAdminApi} from '../adminApiProvider';
 import type Event from '../../common/models/event';
+import {EventType} from '../../common/models/event';
 
 import CardC from './CardC';
 
@@ -22,6 +23,10 @@ const EventC: React.FC<{event: Event}> = ({event}) => (
 				<dd><Typography>{event.sessionUuid}</Typography></dd>
 				<dt><Typography>URL</Typography></dt>
 				<dd><Typography>{event.url}</Typography></dd>
+				{event.type === EventType.WATCH_TIME && (<>
+					<dd><Typography>Watch time</Typography></dd>
+					<dt>{event.watchTimes.map(watchTime => Math.round(watchTime.secondsWatched)).join(', ')}</dt>
+				</>)}
 			</dl>
 		</CardC>
 	</Grid>

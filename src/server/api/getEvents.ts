@@ -21,6 +21,7 @@ export const createGetEventsRoute: RouteCreator = ({createLogger, dataSource}) =
 				order: {
 					id: 'DESC',
 				},
+				relations: ['watchTimes'],
 			});
 
 		const count = await repo.count();
