@@ -56,7 +56,7 @@ export type AdminApi = {
 	getApiTokens: () => Promise<Maybe<Token[]>>;
 	createApiToken: (name: string) => Promise<Maybe<Token>>;
 	deleteApiToken: (token: string) => Promise<Maybe<string>>;
-	getActivityReport: () => Promise<Maybe<ActivityReport>>;
+	getActivityReport: (page?: number) => Promise<Maybe<ActivityReport>>;
 };
 
 const loadItem = <T>(key: string): T | undefined => {
@@ -222,8 +222,8 @@ export const createAdminApi = (serverUrl: string, showLoginModal?: () => void): 
 			return del<string>(deleteApiToken.replace(':token', token), {}, headers());
 		},
 
-		async getActivityReport() {
-			return get<ActivityReport>(createGetActivityReportDefinition.path, {}, headers());
+		async getActivityReport(page = 1) {
+			return get<ActivityReport>(createGetActivityReportDefinition.path.replace(':page', (page + 1).toString()), {}, headers());
 		},
 	};
 };

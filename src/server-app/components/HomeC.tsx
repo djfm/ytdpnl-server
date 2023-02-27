@@ -105,7 +105,7 @@ const ActivityReportC: React.FC<{
 				</Grid>
 			</Box>
 			<Box>
-				{report.latest.map(entry => <ReportLineC key={entry.id} entry={entry}/>)}
+				{report.results.map(entry => <ReportLineC key={entry.id} entry={entry}/>)}
 			</Box>
 		</div>
 	);
@@ -116,12 +116,13 @@ const ActivityReportC: React.FC<{
 export const HomeC: React.FC = () => {
 	const [report, setReport] = useState<ActivityReport>();
 	const [message, setMessage] = useState<Message>();
+	const [page, setPage] = useState<number>(1);
 
 	const api = useAdminApi();
 
 	useEffect(() => {
 		(async () => {
-			const report = await api.getActivityReport();
+			const report = await api.getActivityReport(page);
 			if (report.kind === 'Success') {
 				setReport(report.value);
 			} else {
@@ -131,12 +132,19 @@ export const HomeC: React.FC = () => {
 				});
 			}
 		})();
-	}, []);
+	}, [page]);
 
 	const ui = (
 		<div>
 			<Typography variant='h1' sx={{mb: 4}}>Home</Typography>
 			<NotificationsC message={message}/>
+			<input
+				type='number'
+				value={page}
+				onChange={e => {
+					setPage(parseInt(e.target.value, 10));
+				}}
+			/>
 			{!report && <Typography>Loading report...</Typography>}
 			{report && <ActivityReportC report={report} />}
 		</div>
